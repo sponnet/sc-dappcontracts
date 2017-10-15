@@ -31,24 +31,38 @@ contract Hashtag is Ownable {
 	MiniMeToken SeekerRep;
 	string public metadataHash;
 
-        event DealRegistered(address dealContract);
+	/// Events
+	event DealRegistered(address dealContract);
 	event ProviderRepAdded(address to, uint amount);
 	event SeekerRepAdded(address to, uint amount);
 
-	function Hashtag(address _token, address _tokenfactory, 
-			string _name, uint _commission, 
-			address _dealFactory, string _metadataHash, 
-			address _ProviderRep, address _SeekerRep){
+	function Hashtag(address _token, address _tokenfactory, string _name, uint _commission, address _dealFactory, string _metadataHash){
 		/// @notice The function that creates the hashtag
 		name = _name;
 		/// @notice The dealFactory that can mint rep on this hashtag and sets the deal type
 		dealFactory = _dealFactory;
 		/// @notice The provider reputation token is created
-		ProviderRep = MiniMeToken(_ProviderRep);
+		ProviderRep = new MiniMeToken(
+			_tokenfactory,
+			0,
+            0,
+            _name,
+            0,
+            'SWR',
+            false
+		);
 
 		/// @notice The seeker reputation token is created
+		SeekerRep = new MiniMeToken(
+			_tokenfactory,
+			0,
+            0,
+            _name,
+            0,
+            'SWR',
+            false
+		);
 
-		SeekerRep = MiniMeToken(_SeekerRep);
 		token = MiniMeToken(_token);
 		metadataHash = _metadataHash;
 		commission = _commission;
